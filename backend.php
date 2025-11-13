@@ -41,4 +41,43 @@ if ($accion == 'listarCitas') {
     $result = $conn->query("SELECT * FROM citas WHERE id_paciente=$id ORDER BY fecha_cita DESC");
     echo json_encode($result->fetch_all(MYSQLI_ASSOC));
 }
+
+if ($accion == 'agregarOdontologo') {
+    $data = json_decode(file_get_contents("php://input"), true);
+    $stmt = $conn->prepare("INSERT INTO odontologos (nombre, especialidad, horario, numero_colegiado, telefono, correo)
+                            VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssss", 
+        $data['nombre'], 
+        $data['especialidad'], 
+        $data['horario'], 
+        $data['numero_colegiado'], 
+        $data['telefono'], 
+        $data['correo']
+    );
+    $stmt->execute();
+    echo json_encode(["status" => "ok"]);
+}
+
+if ($accion == 'listarOdontologos') {
+    $result = $conn->query("SELECT * FROM odontologos ORDER BY id_odontologo DESC");
+    echo json_encode($result->fetch_all(MYSQLI_ASSOC));
+}
+
+if ($accion == 'buscarOdontologo') {
+    $busqueda = "%".$conn->real_escape_string($_GET['q'])."%";
+    $stmt = $conn->prepare("SELECT * FROM odontologos WHERE nombre LIKE ? OR especialidad LIKE ? OR numero_colegiado LIKE ?");
+    $stmt->bind_param("sss", $busqueda, $busqueda, $busqueda);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    echo json_encode($result->fetch_all(MYSQLI_ASSOC));
+}
+
+if ($accion == 'eliminarOdontologo') {
+    $id = intval($_GET['id']);
+    $stmt = $conn->prepare("DELETE FROM odontologos WHERE id_odontologo = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    echo json_encode(["status" => "ok"]);
+}
+
 ?>

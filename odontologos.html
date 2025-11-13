@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestión de Odontólogos - Consultorio Dental</title>
+
+  <!-- Estilos simples para que se vea bien rápido -->
+  <style>
+    :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+    body{margin:0;padding:20px;background:#f5f6fb;color:#111}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    header h1{font-size:20px;margin:0}
+    main{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+    .formulario, .buscador, .tabla{background:#fff;padding:14px;border-radius:10px;box-shadow:0 6px 14px rgba(20,20,60,0.06)}
+    .formulario h2,.buscador h2,.tabla h2{margin:0 0 10px 0;font-size:16px}
+    form input, form textarea, .buscador input{width:100%;padding:8px;margin:6px 0;border:1px solid #dcdce6;border-radius:6px;font-size:14px}
+    form button, .buscador button{padding:8px 12px;border-radius:8px;border:0;background:#2b6ef6;color:#fff;cursor:pointer}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+    th{background:#fafafa}
+    .acciones button{margin-right:6px;padding:6px 8px;border-radius:6px;border:0;cursor:pointer}
+    .btn-danger{background:#ef4444;color:#fff}
+    .btn-secondary{background:#6b7280;color:#fff}
+    /* responsive */
+    @media (max-width:900px){
+      main{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Consultorio Dental — Odontólogos</h1>
+    <nav>
+      <!-- Cambia href según tu estructura (index.html o pacientes.html) -->
+      <a href="index.html" style="text-decoration:none;color:#2b6ef6;font-weight:600">← Volver</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Formulario -->
+    <section class="formulario">
+      <h2>Registrar Odontólogo</h2>
+      <form id="formOdontologo" autocomplete="off">
+        <label>
+          <div style="font-size:12px;margin-bottom:4px">Nombre</div>
+          <input type="text" id="nombre" placeholder="Nombre completo" required>
+        </label>
+
+        <label>
+          <div style="font-size:12px;margin-bottom:4px">Especialidad</div>
+          <input type="text" id="especialidad" placeholder="Ej. Endodoncia, Ortodoncia" required>
+        </label>
+
+        <label>
+          <div style="font-size:12px;margin-bottom:4px">Horario</div>
+          <input type="text" id="horario" placeholder="Lun-Vie 9:00 - 14:00" required>
+        </label>
+
+        <label>
+          <div style="font-size:12px;margin-bottom:4px">Número de colegiado</div>
+          <input type="text" id="numero_colegiado" placeholder="OD-12345" required>
+        </label>
+
+        <label>
+          <div style="font-size:12px;margin-bottom:4px">Teléfono</div>
+          <input type="text" id="telefono" placeholder="9991234567">
+        </label>
+
+        <label>
+          <div style="font-size:12px;margin-bottom:4px">Correo</div>
+          <input type="email" id="correo" placeholder="odontologo@ejemplo.com">
+        </label>
+
+        <div style="margin-top:8px">
+          <button type="submit">Guardar Odontólogo</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Buscador y tabla -->
+    <section style="display:flex;flex-direction:column;gap:12px">
+      <section class="buscador">
+        <h2>Buscar Odontólogo</h2>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="busqueda" placeholder="Buscar por nombre, especialidad o colegiado...">
+          <button id="btnBuscar">Buscar</button>
+        </div>
+      </section>
+
+      <section class="tabla" style="flex:1;overflow:auto">
+        <h2>Odontólogos Registrados</h2>
+        <table id="tablaOdontologos">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Especialidad</th>
+              <th>Horario</th>
+              <th>Colegiado</th>
+              <th>Teléfono</th>
+              <th>Correo</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </section>
+  </main>
+
+  <!-- Script: asegúrate que el nombre coincide con el archivo que creaste -->
+  <script src="script_odontologos.js"></script>
+</body>
+</html>
