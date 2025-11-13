@@ -9,3 +9,6 @@
     
 </body>
 </html>
+<?php 
+require_once("src/credenciales.php");
+?>
