@@ -1,22 +1,11 @@
 <?php
-$host = 'localhost';
-$db   = 'dentista';
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
+$servername = "localhost";
+$username   = "root";
+$password   = "";
+$database   = "consultorio_dental";
 
-// Data Source Name (DSN) indica el tipo de DB (mysql, pgsql, etc.)
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
+$conn = new mysqli($servername, $username, $password, $database);
 
-try {
-     $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-     // Mostrar el error de conexión
-     throw new \PDOException($e->getMessage(), (int)$e->getCode());
+
 }
 ?>

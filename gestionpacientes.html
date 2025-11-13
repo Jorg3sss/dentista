@@ -1,0 +1,78 @@
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Pacientes - Consultorio Dental</title>
+  
+</head>
+<body>
+  <header>
+    <h1> Consultorio Dental - Gestión de Pacientes</h1>
+  </header>
+
+  <main>
+    <section class="formulario">
+      <h2>Registrar Paciente</h2>
+      <form id="formPaciente">
+        <input type="text" id="nombre" placeholder="Nombre completo" required>
+        <input type="text" id="telefono" placeholder="Teléfono">
+        <input type="email" id="correo" placeholder="Correo electrónico">
+        <label>
+          <input type="checkbox" id="autoriza"> Autoriza historial
+        </label>
+        <textarea id="historial" placeholder="Historial básico (si autoriza)"></textarea>
+        <button type="submit">Guardar Paciente</button>
+      </form>
+    </section>
+
+    <section class="buscador">
+      <h2>Buscador Avanzado</h2>
+      <input type="text" id="busqueda" placeholder="Buscar por nombre, teléfono o correo...">
+      <button id="btnBuscar">Buscar</button>
+    </section>
+
+    <section class="tabla">
+      <h2>Pacientes Registrados</h2>
+      <table id="tablaPacientes">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Correo</th>
+            <th>Historial</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="citas" id="citasSection" style="display:none;">
+      <h2>Historial de Citas de <span id="nombrePaciente"></span></h2>
+      <form id="formCita">
+        <input type="hidden" id="idPaciente">
+        <input type="date" id="fecha" required>
+        <input type="text" id="tratamiento" placeholder="Tratamiento realizado" required>
+        <textarea id="notas" placeholder="Notas internas"></textarea>
+        <button type="submit">Agregar Cita</button>
+      </form>
+
+      <table id="tablaCitas">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Tratamiento</th>
+            <th>Notas</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <button onclick="cerrarCitas()">Cerrar</button>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
