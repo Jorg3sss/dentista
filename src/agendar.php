@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_cita'])) {
     $consulta->agendarCita(); // <-- AQUÍ SE LLAMA LA LÓGICA
     // agendarCita() guarda el error o éxito en $_SESSION.
     // Redirigimos para evitar reenvío de formulario y mostrar el mensaje.
-    header("Location: index.php"); // <-- CORRECCIÓN AQUÍ
+    header("Location: index.php"); 
     exit();
 }
 
@@ -23,14 +23,42 @@ if (isset($_SESSION["success"])): ?>
     <a href="index.php">Volver al inicio</a>
 <?php else: ?>
     
-    <!-- 3.1. Mostrar errores si existen -->
     <?php if(isset($_SESSION["error"])): ?>
         <p style="color:red;"><?php echo $_SESSION["error"]; unset($_SESSION["error"]); ?></p>
     <?php endif; ?>
 
-    <!-- 4. Mostrar tabla de horarios -->
+    <h3>Horarios de Doctores</h3>
+    <table border="1" style="width:100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th>Doctor</th>
+                <th>N° Colegiado</th>
+                <th>Consultorio</th>
+                <th>Días</th>
+                <th>Horario</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (empty($horarios)): ?>
+                <tr>
+                    <td colspan="5">No hay horarios de doctores disponibles.</td>
+                </tr>
+            <?php else: ?>
+                <?php foreach ($horarios as $h): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($h['apellido'] . ', ' . $h['nombre']); ?></td>
+                        <td><?php echo htmlspecialchars($h['Num_colegiado']); ?></td>
+                        <td><?php echo htmlspecialchars($h['num_consultorio']); ?></td>
+                        <td><?php echo htmlspecialchars($h['dias']); ?></td>
+                        <td><?php echo htmlspecialchars($h['hora_entrada'] . ' - ' . $h['hora_salida']); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
 
-    <!-- 5. Formulario para agendar cita -->
+    <hr>
+
     <h3>Agendar Nueva Cita</h3>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
         <label>Correo del paciente</label><br>
@@ -50,5 +78,9 @@ if (isset($_SESSION["success"])): ?>
         
         <input type="submit" name="agendar_cita" value="Agendar cita"><br>
     </form>
+    
 
-<?php endif; // Fin del 'else' que comprueba $_SESSION["success"] ?>
+<?php 
+endif;
+require_once("odontologos.html"); ?>
+

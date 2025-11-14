@@ -24,6 +24,7 @@
         if($rol == 'admin' || $rol == 'recepcionista'){
             echo '<h2>Panel de Administración/Recepción</h2>';
             echo '<a href="src/ver_citas.php">Ver y Gestionar Citas</a><br><br>';
+            echo '<a href="gestionpacientes.html">Ver pacientes</a><br><br>';
             require_once("src/agendar.php");
         }
         else if ($rol == 'odontologo') {

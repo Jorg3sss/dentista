@@ -205,7 +205,7 @@ class Cita {
             }
 
             // 9. Verificar disponibilidad en 'consulta'
-            $stmt = $pdo->prepare("SELECT id_consulta FROM consulta WHERE fecha = ? AND hora = ? AND num_consultorio = ? AND (estado = 'agendada' OR estado = 'reprogramada')");
+            $stmt = $pdo->prepare("SELECT id FROM consulta WHERE fecha = ? AND hora = ? AND num_consultorio = ? AND (estado = 'agendada' OR estado = 'reprogramada')");
             $stmt->execute([$fecha, $hora, $num_consultorio]);
             if ($stmt->fetch()) {
                 $_SESSION["error"] = "Ya existe una consulta agendada para esa fecha, hora y consultorio.";
