@@ -1,34 +1,35 @@
-
-
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Pacientes - Consultorio Dental</title>
-  
-</head>
+  </head>
 <body>
   <header>
     <h1> Consultorio Dental - Gestión de Pacientes</h1>
+    <nav>
+        <a href="index.php">← Volver al Inicio</a> |
+        <a href="odontologos.html">Gestionar Odontólogos</a>
+    </nav>
   </header>
 
   <main>
     <section class="formulario">
-      <h2>Registrar Paciente</h2>
+      <h2>Registrar Paciente (Cliente)</h2>
       <form id="formPaciente">
-        <input type="text" id="nombre" placeholder="Nombre completo" required>
+        <input type="text" id="nombre" placeholder="Nombre" required>
+        <input type="text" id="apellido" placeholder="Apellidos" required>
         <input type="text" id="telefono" placeholder="Teléfono">
         <input type="email" id="correo" placeholder="Correo electrónico">
-        <label>
-          <input type="checkbox" id="autoriza"> Autoriza historial
-        </label>
-        <textarea id="historial" placeholder="Historial básico (si autoriza)"></textarea>
+        <textarea id="historial" placeholder="Historial"></textarea>
         <button type="submit">Guardar Paciente</button>
       </form>
     </section>
 
     <section class="buscador">
-      <h2>Buscador Avanzado</h2>
-      <input type="text" id="busqueda" placeholder="Buscar por nombre, teléfono o correo...">
+      <h2>Buscar Paciente</h2>
+      <input type="text" id="busqueda" placeholder="Buscar por nombre, apellido o correo...">
       <button id="btnBuscar">Buscar</button>
     </section>
 
@@ -39,6 +40,7 @@
           <tr>
             <th>ID</th>
             <th>Nombre</th>
+            <th>Apellidos</th>
             <th>Teléfono</th>
             <th>Correo</th>
             <th>Historial</th>
@@ -50,21 +52,16 @@
     </section>
 
     <section class="citas" id="citasSection" style="display:none;">
-      <h2>Historial de Citas de <span id="nombrePaciente"></span></h2>
-      <form id="formCita">
-        <input type="hidden" id="idPaciente">
-        <input type="date" id="fecha" required>
-        <input type="text" id="tratamiento" placeholder="Tratamiento realizado" required>
-        <textarea id="notas" placeholder="Notas internas"></textarea>
-        <button type="submit">Agregar Cita</button>
-      </form>
-
+      <h2>Historial de Consultas de <span id="nombrePaciente"></span></h2>
+      
       <table id="tablaCitas">
         <thead>
           <tr>
             <th>Fecha</th>
-            <th>Tratamiento</th>
-            <th>Notas</th>
+            <th>Hora</th>
+            <th>N° Doctor</th>
+            <th>N° Consultorio</th>
+            <th>Estado</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -73,6 +70,6 @@
     </section>
   </main>
 
-  <script src="script.js"></script>
+  <script src="script_pacientes.js"></script>
 </body>
 </html>

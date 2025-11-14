@@ -1,7 +1,6 @@
 <?php
+// Este archivo AHORA CONTIENE TODA LA LÓGICA
 // Usamos tu conexión PDO
-// Asumimos que este archivo está en la carpeta raíz (junto a index.php)
-// y tu conexión está en 'db/conexion.php'
 require_once './db/conexion.php'; 
 
 header("Content-Type: application/json");
@@ -16,34 +15,23 @@ $accion = $_GET['accion'] ?? '';
 if ($accion == 'agregarOdontologo') {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    // ADAPTACIÓN: Leer todos los campos del formulario
     $nombre = $data['nombre'] ?? '';
     $apellido = $data['apellido'] ?? '';
     $edad = $data['edad'] ?? 0;
     $num_colegiado = $data['numero_colegiado'] ?? null;
     $correo = $data['correo'] ?? null;
     $telefono = $data['telefono'] ?? null;
-    $contrasena = $data['contrasena'] ?? '123456'; // Contraseña de fallback
+    $contrasena = $data['contrasena'] ?? '123456';
     $hashed_password = password_hash($contrasena, PASSWORD_DEFAULT);
-    
-    // ADAPTACIÓN: Campos 'especialidad' y 'horario' del formulario ya no existen.
     
     try {
         $stmt = $pdo->prepare(
             "INSERT INTO doctor (Num_colegiado, nombre, apellido, edad, correo, telefono, contraseña)
-             VALUES (?, ?, ?, ?, ?, ?, ?)"
+            VALUES (?, ?, ?, ?, ?, ?, ?)"
         );
-        
         $stmt->execute([
-            $num_colegiado,
-            $nombre,
-            $apellido,
-            $edad,
-            $correo,
-            $telefono,
-            $hashed_password
+            $num_colegiado, $nombre, $apellido, $edad, $correo, $telefono, $hashed_password
         ]);
-        
         echo json_encode(["status" => "ok", "info" => "Doctor agregado con éxito."]);
     
     } catch (PDOException $e) {
@@ -53,7 +41,6 @@ if ($accion == 'agregarOdontologo') {
 
 if ($accion == 'listarOdontologos') {
     try {
-        // ADAPTACIÓN: Seleccionar de 'doctor'
         $stmt = $pdo->query("SELECT Num_colegiado, nombre, apellido, telefono, correo FROM doctor ORDER BY apellido, nombre");
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
     
@@ -64,17 +51,13 @@ if ($accion == 'listarOdontologos') {
 
 if ($accion == 'buscarOdontologo') {
     try {
-        // CORRECCIÓN: Preparamos 2 variables para la búsqueda
         $busqueda_texto = "%" . ($_GET['q'] ?? '') . "%";
-        $busqueda_num = $_GET['q'] ?? ''; // Para búsqueda exacta de Num_colegiado
+        $busqueda_num = $_GET['q'] ?? ''; 
         
-        // ADAPTACIÓN: Buscar en 'doctor' por nombre/apellido (LIKE) o Num_colegiado (EXACTO)
         $stmt = $pdo->prepare(
             "SELECT Num_colegiado, nombre, apellido, telefono, correo FROM doctor 
              WHERE nombre LIKE ? OR apellido LIKE ? OR Num_colegiado = ?"
         );
-        
-        // Ejecutamos con ambos tipos de variables
         $stmt->execute([$busqueda_texto, $busqueda_texto, $busqueda_num]);
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 
@@ -85,13 +68,87 @@ if ($accion == 'buscarOdontologo') {
 
 if ($accion == 'eliminarOdontologo') {
     try {
-        $num_colegiado = intval($_GET['id']); // El ID ahora es el Num_colegiado
-        
-        // ADAPTACIÓN: Borrar de 'doctor' usando 'Num_colegiado'
+        $num_colegiado = intval($_GET['id']);
         $stmt = $pdo->prepare("DELETE FROM doctor WHERE Num_colegiado = ?");
         $stmt->execute([$num_colegiado]);
-        
         echo json_encode(["status" => "ok"]);
+
+    } catch (PDOException $e) {
+        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+    }
+}
+
+
+// --- ACCIONES DE PACIENTE (TABLA CLIENTE) ---
+
+if ($accion == 'agregarCliente') {
+    $data = json_decode(file_get_contents("php://input"), true);
+    
+    try {
+        $stmt = $pdo->prepare(
+            "INSERT INTO cliente (nombre, apellidos, correo, telefono, historial) 
+             VALUES (?, ?, ?, ?, ?)"
+        );
+        
+        $stmt->execute([
+            $data['nombre'],
+            $data['apellido'],
+            $data['correo'],
+            $data['telefono'],
+            $data['historial']
+        ]);
+        
+        echo json_encode(["status" => "ok", "info" => "Cliente agregado con éxito."]);
+    
+    } catch (PDOException $e) {
+        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+    }
+}
+
+if ($accion == 'listarClientes') {
+    try {
+        $stmt = $pdo->query("SELECT id, nombre, apellidos, telefono, correo, historial 
+                             FROM cliente 
+                             ORDER BY apellidos, nombre");
+        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    
+    } catch (PDOException $e) {
+        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+    }
+}
+
+if ($accion == 'buscarCliente') {
+    try {
+        $busqueda = "%" . ($_GET['q'] ?? '') . "%";
+        
+        $stmt = $pdo->prepare(
+            "SELECT * FROM cliente 
+             WHERE nombre LIKE ? OR apellidos LIKE ? OR correo LIKE ? OR telefono LIKE ?"
+        );
+        
+        $stmt->execute([$busqueda, $busqueda, $busqueda, $busqueda]);
+        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+
+    } catch (PDOException $e) {
+        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+    }
+}
+
+// --- ACCIONES DE CITAS (TABLA CONSULTA) ---
+
+if ($accion == 'listarConsultas') {
+    try {
+        $id_cliente = intval($_GET['id_cliente'] ?? 0);
+        
+        $stmt = $pdo->prepare(
+            "SELECT fecha, hora, num_colegiado, num_consultorio, estado 
+             FROM consulta 
+             WHERE id_cliente = ? 
+             ORDER BY fecha, hora DESC"
+        );
+        
+        $stmt->execute([$id_cliente]);
+        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
 
     } catch (PDOException $e) {
         echo json_encode(["status" => "error", "message" => $e->getMessage()]);
